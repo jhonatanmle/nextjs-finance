@@ -1,4 +1,5 @@
-import Logo from '@/shared/components/logo';
+import Logo from "@/shared/components/logo";
+import { NavUser } from "@/shared/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -10,10 +11,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@/shared/components/ui/sidebar';
-import { MENU_ITEMS } from '@/shared/constants/menu';
+} from "@/shared/components/ui/sidebar";
+import { MENU_ITEMS } from "@/shared/constants/menu";
+import { supabaseServer } from "@/shared/lib/supabase/server";
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const authUser = await supabaseServer.auth.getUser();
+
+  const user = authUser.data.user;
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -42,7 +48,15 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <NavUser
+          user={{
+            name: user?.user_metadata?.full_name ?? "Anonymous",
+            email: user?.email ?? "Anonymous",
+            avatar: user?.user_metadata?.avatar_url ?? "",
+          }}
+        />
+      </SidebarFooter>
     </Sidebar>
   );
 }
