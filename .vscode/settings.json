@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "files.associations": {
+    "*.scss": "tailwindcss"
+  },
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "editor.codeLens": true
+}
