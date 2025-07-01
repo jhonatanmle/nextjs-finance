@@ -49,9 +49,24 @@ const getMonthTotal = async (date: Date) => {
   return financeTotalsMapper.mapFrom(data, date);
 };
 
+const lastRecords = async () => {
+  const { data, error } = await supabaseServer
+    .from("FinanceRecord")
+    .select(`*, Category (*), Subcategory (*), DollarPrice (*)`)
+    .limit(4)
+    .order("record_date", { ascending: false });
+
+  if (error) {
+    return [];
+  }
+
+  return financeRecordMapper.mapFrom(data);
+};
+
 const financeApi = {
   findAll,
   getMonthTotal,
+  lastRecords,
 };
 
 export default financeApi;

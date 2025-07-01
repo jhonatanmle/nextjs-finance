@@ -1,3 +1,19 @@
+import { dollarPriceMapper } from "@/features/dollar-price/mappers/dollar-price.mapper";
+import { supabaseServer } from "@/shared/lib/supabase/server";
+
+const getAll = async () => {
+  const { data, error } = await supabaseServer
+    .from("DollarPrice")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    return [];
+  }
+
+  return dollarPriceMapper.mapFrom(data);
+};
+
 const getExternalPrice = async () => {
   const apiBase = process.env.DOLLAR_PRICE_API_BASE;
   const apiKey = process.env.DOLLAR_PRICE_API_KEY;
@@ -16,6 +32,7 @@ const getExternalPrice = async () => {
 
 const dollarPriceApi = {
   getExternalPrice,
+  getAll,
 };
 
 export default dollarPriceApi;
