@@ -1,12 +1,13 @@
 import authApi from "@/features/auth/auth.api";
 import { Option } from "@/features/core/types/option.type";
 import { goalMapper } from "@/features/goals/mappers/goal.mapper";
-import { supabaseServer } from "@/shared/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 
 const findAll = async () => {
+  const supabase = await createSupabaseServerClient();
   const userId = await authApi.getUserId();
 
-  const { data, error } = await supabaseServer
+  const { data, error } = await supabase
     .from("Goals")
     .select("*")
     .contains("users", [userId])
@@ -20,9 +21,10 @@ const findAll = async () => {
 };
 
 const findAllWithTransactions = async () => {
+  const supabase = await createSupabaseServerClient();
   const userId = await authApi.getUserId();
 
-  const { data, error } = await supabaseServer
+  const { data, error } = await supabase
     .from("Goals")
     .select("*, financeRecords:FinanceRecord(*)")
     .eq("enabled", true)

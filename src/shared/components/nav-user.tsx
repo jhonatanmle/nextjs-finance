@@ -22,7 +22,7 @@ import {
   useSidebar,
 } from "@/shared/components/ui/sidebar";
 import { useTransition } from "react";
-import { logoutGithub } from "@/app/(auth)/sign-in/actions";
+import { logoutGithub } from "@/features/auth/actions";
 import { User } from "@/features/auth/schemas";
 
 export function NavUser({ user }: { user: User }) {

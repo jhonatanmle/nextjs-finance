@@ -13,10 +13,11 @@ import {
   SidebarMenuItem,
 } from "@/shared/components/ui/sidebar";
 import { MENU_ITEMS } from "@/shared/constants/menu";
-import { supabaseServer } from "@/shared/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 
 export async function AppSidebar() {
-  const authUser = await supabaseServer.auth.getUser();
+  const supabase = await createSupabaseServerClient();
+  const authUser = await supabase.auth.getUser();
 
   const user = authUser.data.user;
 

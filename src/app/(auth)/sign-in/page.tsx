@@ -1,12 +1,12 @@
-import { loginWithGithub } from '@/app/(auth)/sign-in/actions';
-import { Button } from '@/shared/components/ui/button';
+import { loginWithGithub } from "@/features/auth/actions";
+import { Button } from "@/shared/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-} from '@/shared/components/ui/card';
-import { Github } from 'lucide-react';
+} from "@/shared/components/ui/card";
+import { Github } from "lucide-react";
 
 const SignInPage = () => {
   return (

@@ -3,14 +3,15 @@ import financeRecordMapper from "@/features/finance/mapper/finance-record.mapper
 import financeTotalsMapper from "@/features/finance/mapper/finance-totals.mapper";
 import { FilterForm } from "@/features/finance/schemas";
 import { ALL_OPTION_VALUE } from "@/shared/constants/option";
-import { supabaseServer } from "@/shared/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 import { endOfMonth, startOfMonth } from "date-fns";
 
 const findAll = async (filters: FilterForm) => {
+  const supabase = await createSupabaseServerClient();
   const startDate = startOfMonth(filters.date).toISOString();
   const endDate = endOfMonth(filters.date).toISOString();
 
-  const query = supabaseServer
+  const query = supabase
     .from("FinanceRecord")
     .select(`*, Category (*), Subcategory (*), DollarPrice (*)`)
     .order("record_date", { ascending: false })
@@ -35,10 +36,11 @@ const findAll = async (filters: FilterForm) => {
 };
 
 const getMonthTotal = async (date: Date) => {
+  const supabase = await createSupabaseServerClient();
   const startDate = startOfMonth(date).toISOString();
   const endDate = endOfMonth(date).toISOString();
 
-  const { data } = await supabaseServer
+  const { data } = await supabase
     .from("FinanceRecord")
     .select(`*, Category (*), Subcategory (*), DollarPrice (*)`)
     .order("record_date", { ascending: false })
@@ -50,7 +52,8 @@ const getMonthTotal = async (date: Date) => {
 };
 
 const lastRecords = async () => {
-  const { data, error } = await supabaseServer
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
     .from("FinanceRecord")
     .select(`*, Category (*), Subcategory (*), DollarPrice (*)`)
     .limit(4)

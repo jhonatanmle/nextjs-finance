@@ -1,8 +1,9 @@
 import { dollarPriceMapper } from "@/features/dollar-price/mappers/dollar-price.mapper";
-import { supabaseServer } from "@/shared/lib/supabase/server";
+import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 
 const getAll = async () => {
-  const { data, error } = await supabaseServer
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
     .from("DollarPrice")
     .select("*")
     .order("created_at", { ascending: false });

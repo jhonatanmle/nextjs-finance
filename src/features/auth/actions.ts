@@ -26,7 +26,6 @@ export const loginWithGithub = async () => {
 
 export const logoutGithub = async () => {
   const supabase = await createSupabaseServerClient();
-
   const { error } = await supabase.auth.signOut();
 
   if (error) {
