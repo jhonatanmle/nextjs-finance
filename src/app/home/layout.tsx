@@ -4,8 +4,11 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/shared/components/ui/sidebar";
+import { getUserWallet } from "@/features/stock-events/actions";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({ children }: { children: React.ReactNode }) {
+  // Prefetch user wallet data at layout level
+  await getUserWallet();
   return (
     <SidebarProvider>
       <AppSidebar />

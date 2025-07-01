@@ -1,5 +1,17 @@
+import { holdingMapper } from "@/features/stock-events/mappers/holding.mapper";
 import { PortfolioConfig } from "@/features/stock-events/stock-events.types";
 import { supabaseServer } from "@/shared/lib/supabase/server";
+
+const holdingView = async (config: PortfolioConfig) => {
+  const { data } = await supabaseServer.functions.invoke(
+    "stock-events-holding-view",
+    {
+      body: config,
+    }
+  );
+
+  return holdingMapper.mapFrom(data);
+};
 
 const getUserWallet = async (): Promise<PortfolioConfig | null> => {
   const { data } = await supabaseServer
@@ -16,6 +28,7 @@ const getUserWallet = async (): Promise<PortfolioConfig | null> => {
 
 const stockEventsApi = {
   getUserWallet,
+  holdingView,
 };
 
 export default stockEventsApi;
