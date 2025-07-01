@@ -1,9 +1,9 @@
-import { AppSidebar } from '@/shared/components/app-sidebar';
+import { AppSidebar } from "@/shared/components/app-sidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '@/shared/components/ui/sidebar';
+} from "@/shared/components/ui/sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,7 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <SidebarTrigger className="-ml-1" />
           </div>
         </header>
-        {children}
+        <main className="p-4">{children}</main>
       </SidebarInset>
     </SidebarProvider>
   );

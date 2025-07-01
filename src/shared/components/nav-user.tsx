@@ -23,7 +23,7 @@ import {
 } from "@/shared/components/ui/sidebar";
 import { useTransition } from "react";
 import { logoutGithub } from "@/app/(auth)/sign-in/actions";
-import { User } from "@/shared/schemas/auth";
+import { User } from "@/features/auth/schemas";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
