@@ -15,6 +15,7 @@ import { cn } from "@/shared/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import dynamic from "next/dynamic";
 
 type Props = React.ComponentProps<"div"> & {
   data: FinanceRecord[];
@@ -26,7 +27,7 @@ const RecentTransactions = ({ data, className }: Props) => {
       header: "Fecha",
       accessorKey: "createdAt",
       cell: ({ row }) => (
-        <div className="w-[100px]" suppressHydrationWarning>
+        <div className="w-[100px]">
           {format(row.getValue<Date>("createdAt"), "dd MMM yyyy", {
             locale: es,
           })}
@@ -82,3 +83,8 @@ const RecentTransactions = ({ data, className }: Props) => {
 };
 
 export default RecentTransactions;
+
+export const DynamicRecentTransactions = dynamic(
+  () => import("@/features/dashboard/components/recent-transactions"),
+  { ssr: false }
+);

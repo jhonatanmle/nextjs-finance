@@ -6,10 +6,10 @@ import dashboardApi from "@/features/dashboard/dashboard.api";
 import Expenses from "@/features/dashboard/components/expenses";
 import GoalsMetrics from "@/features/dashboard/components/goals-metrics";
 import goalsApi from "@/features/goals/goals.api";
-import RecentTransactions from "@/features/dashboard/components/recent-transactions";
 import financeApi from "@/features/finance/finance.api";
 import DollarPriceMetrics from "@/features/dashboard/components/dollar-price";
 import dollarPriceApi from "@/features/dollar-price/dollar-price.api";
+import { DynamicRecentTransactions } from "@/features/dashboard/components/recent-transactions";
 
 const DashboardPage = async () => {
   const [cashflowData, goalsData, recentTransactions, dollarPriceMetrics] =
@@ -43,7 +43,7 @@ const DashboardPage = async () => {
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Expenses className="lg:col-span-2" chartData={cashflowData} />
         <GoalsMetrics data={goalsData} />
-        <RecentTransactions
+        <DynamicRecentTransactions
           data={recentTransactions}
           className="lg:col-span-2"
         />
