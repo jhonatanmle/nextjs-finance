@@ -13,6 +13,8 @@ import {
 } from "@/shared/components/ui/card";
 import { cn } from "@/shared/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 type Props = React.ComponentProps<"div"> & {
   data: FinanceRecord[];
@@ -25,10 +27,8 @@ const RecentTransactions = ({ data, className }: Props) => {
       accessorKey: "createdAt",
       cell: ({ row }) => (
         <div className="w-[100px]">
-          {row.getValue<Date>("createdAt").toLocaleDateString("es", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
+          {format(row.getValue<Date>("createdAt"), "dd MMM yyyy", {
+            locale: es,
           })}
         </div>
       ),
