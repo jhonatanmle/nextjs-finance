@@ -26,8 +26,8 @@ const RecentTransactions = ({ data, className }: Props) => {
       header: "Fecha",
       accessorKey: "createdAt",
       cell: ({ row }) => (
-        <div className="w-[100px]">
-          {format(new Date(row.getValue<Date>("createdAt")), "dd MMM yyyy", {
+        <div className="w-[100px]" suppressHydrationWarning>
+          {format(row.getValue<Date>("createdAt"), "dd MMM yyyy", {
             locale: es,
           })}
         </div>
