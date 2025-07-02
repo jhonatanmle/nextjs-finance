@@ -27,7 +27,7 @@ const RecentTransactions = ({ data, className }: Props) => {
       accessorKey: "createdAt",
       cell: ({ row }) => (
         <div className="w-[100px]">
-          {format(row.getValue<Date>("createdAt"), "dd MMM yyyy", {
+          {format(new Date(row.getValue<Date>("createdAt")), "dd MMM yyyy", {
             locale: es,
           })}
         </div>
