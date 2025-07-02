@@ -3,7 +3,7 @@ import { RecordType } from "@/features/core/types/record-type";
 import { z } from "zod";
 
 export const filterFormSchema = z.object({
-  date: z.coerce.date().default(new Date()),
+  date: z.coerce.date(),
   paymentType: z.string().optional(),
   category: z.string().optional(),
 });
