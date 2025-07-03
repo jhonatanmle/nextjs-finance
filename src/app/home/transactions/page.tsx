@@ -1,11 +1,13 @@
-import financeApi from "@/features/finance/finance.api";
+import { Suspense } from "react";
 import { FilterForm } from "@/features/finance/schemas";
 import TransactionsPageClient from "./page.client";
+import TransactionsTable from "../../../features/finance/components/transactions-table";
 import categoryApi from "@/features/category/category.api";
+import { DataTableSkeleton } from "@/shared/components/datatable-skeleton";
 
-interface Props {
+type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+};
 
 const TransactionsPage = async ({ searchParams }: Props) => {
   const params = await searchParams;
@@ -16,16 +18,21 @@ const TransactionsPage = async ({ searchParams }: Props) => {
     category: params.category as string | undefined,
   };
 
-  const [financeRecords, categories] = await Promise.all([
-    financeApi.findAll(filters),
-    categoryApi.getOptions(),
-  ]);
+  const categories = await categoryApi.getOptions();
+
+  const suspenseKey = `${filters.date.toISOString()}-${
+    filters.paymentType ?? "all"
+  }-${filters.category ?? "all"}`;
 
   return (
-    <TransactionsPageClient
-      initialData={financeRecords}
-      categories={categories}
-    />
+    <TransactionsPageClient categories={categories}>
+      <Suspense
+        key={suspenseKey}
+        fallback={<DataTableSkeleton columnCount={6} />}
+      >
+        <TransactionsTable filters={filters} />
+      </Suspense>
+    </TransactionsPageClient>
   );
 };
 

@@ -5,16 +5,16 @@ import { useCallback } from "react";
 import FinanceFilterListForm from "@/features/finance/components/finance-filter-list-form";
 import { Button } from "@/shared/components/ui/button";
 import { FilterForm } from "@/features/finance/schemas";
-import { FinanceRecord } from "@/features/finance/schemas";
 import { Option } from "@/features/core/types/option.type";
 import { format } from "date-fns";
+import { ReactNode } from "react";
 
 interface Props {
-  initialData: FinanceRecord[];
   categories: Option[];
+  children: ReactNode;
 }
 
-const TransactionsPageClient = ({ initialData, categories }: Props) => {
+const TransactionsPageClient = ({ categories, children }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -49,10 +49,7 @@ const TransactionsPageClient = ({ initialData, categories }: Props) => {
         </Button>
       </FinanceFilterListForm>
 
-      {/* TODO: Add DataTable component here */}
-      <div className="text-sm text-muted-foreground">
-        {initialData.length} transacciones encontradas
-      </div>
+      {children}
     </div>
   );
 };
