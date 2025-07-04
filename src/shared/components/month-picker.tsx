@@ -275,7 +275,7 @@ const MonthPicker = ({ defaultValue, onChange }: MonthPickerProps) => {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "w-full md:w-[280px] justify-start text-left font-normal",
             !date && "text-muted-foreground"
           )}
           onClick={() => setShowPopover(true)}

@@ -13,5 +13,11 @@ export const categorySchema = z.object({
   subcategories: z.array(subcategorySchema).optional(),
 });
 
+export const searchCategoryFormSchema = z.object({
+  name: z.string().optional(),
+});
+
 export type Subcategory = z.infer<typeof subcategorySchema>;
 export type Category = z.infer<typeof categorySchema>;
+
+export type SearchCategoryFormValues = z.infer<typeof searchCategoryFormSchema>;

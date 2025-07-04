@@ -3,6 +3,8 @@ import { FilterForm } from "@/features/finance/schemas";
 import TransactionsPageClient from "./page.client";
 import TransactionsTable from "../../../features/finance/components/transactions-table";
 import categoryApi from "@/features/category/category.api";
+import subcategoryApi from "@/features/category/subcategory.api";
+import goalsApi from "@/features/goals/goals.api";
 import { DataTableSkeleton } from "@/shared/components/datatable-skeleton";
 
 type Props = {
@@ -19,13 +21,19 @@ const TransactionsPage = async ({ searchParams }: Props) => {
   };
 
   const categories = await categoryApi.getOptions();
+  const subcategories = await subcategoryApi.getAll();
+  const goals = await goalsApi.findAllOptions();
 
   const suspenseKey = `${filters.date.toISOString()}-${
     filters.paymentType ?? "all"
   }-${filters.category ?? "all"}`;
 
   return (
-    <TransactionsPageClient categories={categories}>
+    <TransactionsPageClient
+      categories={categories}
+      subcategories={subcategories}
+      goals={goals}
+    >
       <Suspense
         key={suspenseKey}
         fallback={<DataTableSkeleton columnCount={6} />}

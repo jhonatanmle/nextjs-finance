@@ -63,78 +63,76 @@ const FinanceFilterListForm = ({ children, categories, onSearch }: Props) => {
   }, [showFinanceForm, setShowFinanceForm]);
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:flex md:justify-between md:flex-wrap">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onFinish)}
-          className="grid grid-cols-1 gap-4 md:flex md:flex-wrap"
-        >
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <MonthPicker
-                  defaultValue={field.value}
-                  onChange={field.onChange}
-                />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="paymentType"
-            render={({ field }) => (
-              <FormItem>
-                <Select onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger className="w-full md:w-[250px]">
-                      <SelectValue placeholder="Medio de pago" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {PAYMENT_TYPE_FILTER_OPTIONS.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="category"
-            render={({ field }) => (
-              <FormItem>
-                <Select onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger className="w-full md:w-[250px]">
-                      <SelectValue placeholder="Categoría" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories?.map((item) => (
-                      <SelectItem key={item.value} value={item.value}>
-                        {item.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" variant="secondary">
-            Buscar
-          </Button>
-        </form>
-      </Form>
-      <div className="flex gap-4">{children}</div>
-    </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onFinish)}
+        className="grid grid-cols-1 gap-4 md:flex md:flex-wrap"
+      >
+        <FormField
+          control={form.control}
+          name="date"
+          render={({ field }) => (
+            <FormItem>
+              <MonthPicker
+                defaultValue={field.value}
+                onChange={field.onChange}
+              />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="paymentType"
+          render={({ field }) => (
+            <FormItem>
+              <Select onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger className="w-full md:w-[250px]">
+                    <SelectValue placeholder="Medio de pago" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {PAYMENT_TYPE_FILTER_OPTIONS.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <Select onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger className="w-full md:w-[250px]">
+                    <SelectValue placeholder="Categoría" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {categories?.map((item) => (
+                    <SelectItem key={item.value} value={item.value}>
+                      {item.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" variant="secondary">
+          Buscar
+        </Button>
+        <div className="flex gap-4">{children}</div>
+      </form>
+    </Form>
   );
 };
 

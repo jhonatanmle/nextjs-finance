@@ -1,11 +1,14 @@
 import { CurrencyType } from "@/features/core/types/currency.type";
 import { RecordType } from "@/features/core/types/record-type";
-import { FinanceRecord } from "@/features/finance/schemas";
+import { FinanceFormValues, FinanceRecord } from "@/features/finance/schemas";
 import { ALL_OPTION_VALUE } from "@/shared/constants/option";
 import { AmountUtils } from "@/shared/lib/amount";
-import { SupabaseFinanceRecordListItem } from "@/shared/lib/supabase/tables";
+import {
+  SupabaseFinanceRecord,
+  SupabaseFinanceRecordListItem,
+} from "@/shared/lib/supabase/tables";
 import { validateArray } from "@/shared/lib/utils";
-import { format } from "date-fns";
+import { format, formatISO } from "date-fns";
 
 const mapFrom = (
   data: Partial<SupabaseFinanceRecordListItem>[]
@@ -50,8 +53,29 @@ const mapFrom = (
   return result;
 };
 
+const mapTo = (data: FinanceFormValues): Partial<SupabaseFinanceRecord> => {
+  const record_date = formatISO(data.date);
+
+  return {
+    category_id: Number(data.categoryId),
+    subcategory_id: Number(data.subcategoryId),
+    record_date,
+    amount: data.amount,
+    payment_type: data.paymentType,
+    currency_type: data.currencyType as CurrencyType,
+    comment: data.comment,
+    record_type: data.recordType,
+    goal_id:
+      data.goalId && data.goalId?.toString() !== ALL_OPTION_VALUE
+        ? Number(data.goalId)
+        : null,
+    goal_net_amount: data.goalNetAmount,
+  };
+};
+
 const financeRecordMapper = {
   mapFrom,
+  mapTo,
 };
 
 export default financeRecordMapper;
