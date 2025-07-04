@@ -4,7 +4,6 @@ import financeTotalsMapper from "@/features/finance/mapper/finance-totals.mapper
 import { FilterForm, FinanceFormValues } from "@/features/finance/schemas";
 import { ALL_OPTION_VALUE } from "@/shared/constants/option";
 import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
-import { SupabaseFinanceRecord } from "@/shared/lib/supabase/tables";
 import { endOfMonth, startOfMonth } from "date-fns";
 
 const findAll = async (filters: FilterForm) => {
@@ -69,7 +68,7 @@ const lastRecords = async () => {
 
 const create = async (values: FinanceFormValues) => {
   const supabase = await createSupabaseServerClient();
-  
+
   const financeRecord = financeRecordMapper.mapTo(values);
 
   const { data, error } = await supabase
@@ -87,7 +86,7 @@ const create = async (values: FinanceFormValues) => {
 
 const update = async (id: number, values: FinanceFormValues) => {
   const supabase = await createSupabaseServerClient();
-  
+
   const financeRecord = financeRecordMapper.mapTo(values);
 
   const { data, error } = await supabase
@@ -107,10 +106,7 @@ const update = async (id: number, values: FinanceFormValues) => {
 const deleteRecord = async (id: number) => {
   const supabase = await createSupabaseServerClient();
 
-  const { error } = await supabase
-    .from("FinanceRecord")
-    .delete()
-    .eq("id", id);
+  const { error } = await supabase.from("FinanceRecord").delete().eq("id", id);
 
   if (error) {
     throw new Error(error.message);
