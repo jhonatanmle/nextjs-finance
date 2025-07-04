@@ -104,12 +104,28 @@ const update = async (id: number, values: FinanceFormValues) => {
   return data;
 };
 
+const deleteRecord = async (id: number) => {
+  const supabase = await createSupabaseServerClient();
+
+  const { error } = await supabase
+    .from("FinanceRecord")
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return true;
+};
+
 const financeApi = {
   findAll,
   getMonthTotal,
   lastRecords,
   create,
   update,
+  delete: deleteRecord,
 };
 
 export default financeApi;

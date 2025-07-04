@@ -40,7 +40,7 @@ export const financeFormSchema = z.object({
   currencyType: z.nativeEnum(CurrencyType),
   recordType: z.nativeEnum(RecordType),
   goalId: z.string().optional(),
-  goalNetAmount: z.coerce.number().positive().optional(),
+  goalNetAmount: z.coerce.number().optional(),
 });
 
 export type FilterForm = z.infer<typeof filterFormSchema>;

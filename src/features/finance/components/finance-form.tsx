@@ -33,6 +33,8 @@ import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useMemo } from "react";
 import { Subcategory } from "@/features/category/category.schema";
+import { financeRecordForm } from "@/features/finance/mapper/finance-record-form.mapper";
+import { ALL_OPTION_VALUE } from "@/shared/constants/option";
 
 type Props = React.ComponentProps<"div"> & {
   initialValue?: FinanceRecord;
@@ -54,11 +56,13 @@ const FinanceForm = ({
 }: Props) => {
   const form = useForm<FinanceFormValues>({
     resolver: zodResolver(financeFormSchema),
-    defaultValues: {
-      currencyType: CurrencyType.PEN,
-      recordType: RecordType.expense,
-      date: new Date(),
-    },
+    defaultValues: initialValue
+      ? financeRecordForm.mapFrom(initialValue)
+      : {
+          currencyType: CurrencyType.PEN,
+          recordType: RecordType.expense,
+          date: new Date(),
+        },
   });
 
   const categoryIdValue = form.watch("categoryId");
@@ -283,16 +287,10 @@ const FinanceForm = ({
             <FormField
               control={form.control}
               name="goalId"
-              rules={{
-                required: false,
-              }}
               render={({ field }) => (
-                <FormItem className="grid items-center">
+                <FormItem key={field.value} className="grid items-center">
                   <FormLabel>Objetivo (opcional)</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger
                         className="m-0 w-full"
@@ -312,7 +310,7 @@ const FinanceForm = ({
                 </FormItem>
               )}
             />
-            {goalIdValue ? (
+            {goalIdValue && goalIdValue !== ALL_OPTION_VALUE ? (
               <FormField
                 control={form.control}
                 name="goalNetAmount"
@@ -354,7 +352,7 @@ const FinanceForm = ({
 
           <Button
             onClick={form.handleSubmit(onFinish)}
-            disabled={!form.formState.isValid}
+            disabled={!form.formState.isValid || !form.formState.isDirty}
           >
             {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />

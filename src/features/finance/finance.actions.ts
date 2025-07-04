@@ -31,3 +31,17 @@ export async function updateFinanceRecordAction(id: number, values: FinanceFormV
     };
   }
 }
+
+export async function deleteFinanceRecordAction(id: number) {
+  try {
+    await financeApi.delete(id);
+    revalidatePath("/home/transactions");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting finance record:", error);
+    return { 
+      success: false, 
+      error: error instanceof Error ? error.message : "Error desconocido"
+    };
+  }
+}

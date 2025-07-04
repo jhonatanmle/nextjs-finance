@@ -14,26 +14,38 @@ import {
 } from "@/shared/components/ui/dropdown-menu";
 import { Button } from "@/shared/components/ui/button";
 import { Ellipsis } from "lucide-react";
+import { useFinanceStore } from "@/features/finance/finance.store";
+import { deleteFinanceRecordAction } from "@/features/finance/finance.actions";
+import { useTransition } from "react";
+import { toast } from "sonner";
 
 interface TransactionsTableClientProps {
   data: FinanceRecord[];
 }
 
 const TransactionsTableClient = ({ data }: TransactionsTableClientProps) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isPending, startTransition] = useTransition();
+  const { setShowFinanceForm, setInitialFormValues } = useFinanceStore();
+
   const onTableDelete = async (id: number) => {
-    // try {
-    //   await mutateAsync(id);
-    //   reloadQuerys();
-    // } catch {
-    //   toast.error("Error al eliminar el registro");
-    // }
+    if (!confirm("¿Estás seguro de que quieres eliminar este registro? Esta acción no se puede deshacer.")) {
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await deleteFinanceRecordAction(id);
+      
+      if (result.success) {
+        toast.success("Registro eliminado correctamente");
+      } else {
+        toast.error("Error al eliminar el registro");
+      }
+    });
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onTableEdit = (record: FinanceRecord) => {
-    // setInitialFormValues(record);
-    // setShowFinanceForm(true);
+    setInitialFormValues(record);
+    setShowFinanceForm(true);
   };
 
   const columns: ColumnDef<FinanceRecord>[] = [
@@ -90,7 +102,7 @@ const TransactionsTableClient = ({ data }: TransactionsTableClientProps) => {
       cell: ({ cell }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="w-8 h-8">
+            <Button variant="outline" size="icon" className="w-8 h-8" disabled={isPending}>
               <Ellipsis size={15} />
             </Button>
           </DropdownMenuTrigger>
@@ -99,6 +111,7 @@ const TransactionsTableClient = ({ data }: TransactionsTableClientProps) => {
               onClick={() => {
                 onTableEdit(cell.row.original);
               }}
+              disabled={isPending}
             >
               <span>Editar</span>
             </DropdownMenuItem>
@@ -106,6 +119,7 @@ const TransactionsTableClient = ({ data }: TransactionsTableClientProps) => {
               onClick={() => {
                 onTableDelete(cell.row.original.id);
               }}
+              disabled={isPending}
             >
               <span>Eliminar</span>
             </DropdownMenuItem>
