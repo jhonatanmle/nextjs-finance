@@ -14,6 +14,7 @@ import {
 } from "@/shared/components/ui/sidebar";
 import { MENU_ITEMS } from "@/shared/constants/menu";
 import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
+import Link from "next/link";
 
 export async function AppSidebar() {
   const supabase = await createSupabaseServerClient();
@@ -38,10 +39,10 @@ export async function AppSidebar() {
               {MENU_ITEMS.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
