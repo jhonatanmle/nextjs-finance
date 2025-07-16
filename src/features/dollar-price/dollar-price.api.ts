@@ -27,7 +27,7 @@ const getMonthlyPrice = async (date: Date) => {
     .gte("created_at", startDate)
     .lt("created_at", endDate);
 
-  if (dollarPriceResponse?.[0]?.id) {
+  if (!dollarPriceResponse?.[0]?.id) {
     return null;
   }
 

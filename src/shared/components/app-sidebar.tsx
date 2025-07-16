@@ -1,5 +1,6 @@
 import Logo from "@/shared/components/logo";
 import { NavUser } from "@/shared/components/nav-user";
+import SidebarMenuButtonClient from "@/shared/components/sidebar-menu-button";
 import {
   Sidebar,
   SidebarContent,
@@ -9,7 +10,6 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/components/ui/sidebar";
 import { MENU_ITEMS } from "@/shared/constants/menu";
@@ -37,14 +37,12 @@ export async function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {MENU_ITEMS.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <SidebarMenuButtonClient key={item.title} url={item.url}>
+                  <Link href={item.url}>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButtonClient>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
