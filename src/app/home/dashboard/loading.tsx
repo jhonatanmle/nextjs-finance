@@ -5,15 +5,12 @@ import { Skeleton } from "@/shared/components/ui/skeleton";
 export default function DashboardLoading() {
   return (
     <div className="grid gap-6">
-      {/* Metrics Cards Skeleton */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 flex-1">
-          <TotalCardSkeleton />
-          <TotalCardSkeleton />
-          <TotalCardSkeleton />
-          <TotalCardSkeleton />
-        </section>
-      </div>
+      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 flex-1">
+        <TotalCardSkeleton />
+        <TotalCardSkeleton />
+        <TotalCardSkeleton />
+        <TotalCardSkeleton />
+      </section>
 
       {/* Charts and Recent Transactions */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">

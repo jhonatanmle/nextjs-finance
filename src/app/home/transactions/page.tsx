@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { cache, Suspense } from "react";
 import { FilterForm } from "@/features/finance/schemas";
 import TransactionsPageClient from "./page.client";
 import TransactionsTable from "../../../features/finance/components/transactions-table";
@@ -11,6 +11,16 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
+const getCachedData = cache(async () => {
+  const [categories, subcategories, goals] = await Promise.all([
+    categoryApi.getOptions(),
+    subcategoryApi.getAll(),
+    goalsApi.findAllOptions(),
+  ]);
+
+  return { categories, subcategories, goals };
+});
+
 const TransactionsPage = async ({ searchParams }: Props) => {
   const params = await searchParams;
 
@@ -20,9 +30,7 @@ const TransactionsPage = async ({ searchParams }: Props) => {
     category: params.category as string | undefined,
   };
 
-  const categories = await categoryApi.getOptions();
-  const subcategories = await subcategoryApi.getAll();
-  const goals = await goalsApi.findAllOptions();
+  const { categories, subcategories, goals } = await getCachedData();
 
   const suspenseKey = `${filters.date.toISOString()}-${
     filters.paymentType ?? "all"

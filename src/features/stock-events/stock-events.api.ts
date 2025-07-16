@@ -1,8 +1,11 @@
 import { holdingMapper } from "@/features/stock-events/mappers/holding.mapper";
-import { PortfolioConfig } from "@/features/stock-events/stock-events.types";
+import {
+  HoldingView,
+  PortfolioConfig,
+} from "@/features/stock-events/stock-events.types";
 import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
 
-const holdingView = async (config: PortfolioConfig) => {
+const holdingView = async (config: PortfolioConfig): Promise<HoldingView> => {
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase.functions.invoke(
     "stock-events-holding-view",

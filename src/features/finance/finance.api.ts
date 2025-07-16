@@ -1,4 +1,6 @@
+import { CurrencyType } from "@/features/core/types/currency.type";
 import { RecordType } from "@/features/core/types/record-type";
+import dollarPriceApi from "@/features/dollar-price/dollar-price.api";
 import financeRecordMapper from "@/features/finance/mapper/finance-record.mapper";
 import financeTotalsMapper from "@/features/finance/mapper/finance-totals.mapper";
 import { FilterForm, FinanceFormValues } from "@/features/finance/schemas";
@@ -69,11 +71,17 @@ const lastRecords = async () => {
 const create = async (values: FinanceFormValues) => {
   const supabase = await createSupabaseServerClient();
 
+  let dollarPrice: number | null = null;
+
+  if (values.currencyType === CurrencyType.USD) {
+    dollarPrice = await dollarPriceApi.getMonthlyPrice(values.date);
+  }
+
   const financeRecord = financeRecordMapper.mapTo(values);
 
   const { data, error } = await supabase
     .from("FinanceRecord")
-    .insert(financeRecord)
+    .insert({ ...financeRecord, dollar_price: dollarPrice })
     .select()
     .single();
 

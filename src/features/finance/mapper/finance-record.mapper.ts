@@ -39,7 +39,9 @@ const mapFrom = (
     bgCategory: item.Category?.background_color ?? "",
     comment: item.comment ?? "",
     dollarPrice:
-      item.currency_type !== CurrencyType.PEN ? item.DollarPrice!.amount! : 0,
+      item.currency_type !== CurrencyType.PEN && item.DollarPrice
+        ? item.DollarPrice!.amount!
+        : 0,
     recordType: item.record_type
       ? (item.record_type as RecordType)
       : RecordType.expense,

@@ -1,20 +1,19 @@
-import bankApi from "@/features/bank/bank.api";
-import dollarPriceApi from "@/features/dollar-price/dollar-price.api";
-import financeApi from "@/features/finance/finance.api";
-import stockEventsApi from "@/features/stock-events/stock-events.api";
+import { HoldingView } from "@/features/stock-events/stock-events.types";
 import TotalCard from "@/shared/components/total-card";
 
-const DashboardMetrics = async () => {
-  const walletConfig = await stockEventsApi.getUserWallet();
+type Props = {
+  bankTotal: number;
+  portfolio: HoldingView | null;
+  dollarPrice: number;
+  financeRecordTotal?: { amount: number };
+};
 
-  const [bankTotal, portfolio, dollarPrice, financeRecordTotal] =
-    await Promise.all([
-      bankApi.getTotal(),
-      walletConfig ? stockEventsApi.holdingView(walletConfig) : null,
-      dollarPriceApi.getExternalPrice(),
-      financeApi.getMonthTotal(new Date()),
-    ]);
-
+const DashboardMetrics = async ({
+  bankTotal,
+  dollarPrice,
+  portfolio,
+  financeRecordTotal,
+}: Props) => {
   const portfolioTotal =
     portfolio?.amount && dollarPrice ? portfolio.amount * dollarPrice : 0;
   const totalBalance = bankTotal + portfolioTotal;

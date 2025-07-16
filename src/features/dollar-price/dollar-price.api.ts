@@ -1,5 +1,6 @@
 import { dollarPriceMapper } from "@/features/dollar-price/mappers/dollar-price.mapper";
 import { createSupabaseServerClient } from "@/shared/lib/supabase/server";
+import { endOfMonth, startOfMonth } from "date-fns";
 
 const getAll = async () => {
   const supabase = await createSupabaseServerClient();
@@ -13,6 +14,24 @@ const getAll = async () => {
   }
 
   return dollarPriceMapper.mapFrom(data);
+};
+
+const getMonthlyPrice = async (date: Date) => {
+  const supabase = await createSupabaseServerClient();
+  const startDate = startOfMonth(date).toISOString();
+  const endDate = endOfMonth(date).toISOString();
+
+  const { data: dollarPriceResponse } = await supabase
+    .from("DollarPrice")
+    .select("id")
+    .gte("created_at", startDate)
+    .lt("created_at", endDate);
+
+  if (dollarPriceResponse?.[0]?.id) {
+    return null;
+  }
+
+  return dollarPriceResponse?.[0]?.id;
 };
 
 const getExternalPrice = async () => {
@@ -34,6 +53,7 @@ const getExternalPrice = async () => {
 const dollarPriceApi = {
   getExternalPrice,
   getAll,
+  getMonthlyPrice,
 };
 
 export default dollarPriceApi;

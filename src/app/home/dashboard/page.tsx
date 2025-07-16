@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, cache } from "react";
 import DashboardMetrics from "@/features/dashboard/components/dashboard-metrics";
 import TotalCardSkeleton from "@/shared/components/total-card-skeleton";
 import Cashflow from "@/features/dashboard/components/cash-flow";
@@ -10,30 +10,63 @@ import financeApi from "@/features/finance/finance.api";
 import DollarPriceMetrics from "@/features/dashboard/components/dollar-price";
 import dollarPriceApi from "@/features/dollar-price/dollar-price.api";
 import { DynamicRecentTransactions } from "@/features/dashboard/components/recent-transactions";
+import stockEventsApi from "@/features/stock-events/stock-events.api";
+import bankApi from "@/features/bank/bank.api";
+
+const getCachedData = cache(async () => {
+  const walletConfig = await stockEventsApi.getUserWallet();
+  const [
+    cashflowData,
+    goalsData,
+    recentTransactions,
+    dollarPriceMetrics,
+    bankTotal,
+    portfolio,
+    dollarPrice,
+    financeRecordTotal,
+  ] = await Promise.all([
+    dashboardApi.cashflow(),
+    goalsApi.findAllWithTransactions(),
+    financeApi.lastRecords(),
+    dollarPriceApi.getAll(),
+    bankApi.getTotal(),
+    walletConfig ? stockEventsApi.holdingView(walletConfig) : null,
+    dollarPriceApi.getExternalPrice(),
+    financeApi.getMonthTotal(new Date()),
+  ]);
+
+  return {
+    cashflowData,
+    goalsData,
+    recentTransactions,
+    dollarPriceMetrics,
+    bankTotal,
+    portfolio,
+    dollarPrice,
+    financeRecordTotal,
+  };
+});
 
 const DashboardPage = async () => {
-  const [cashflowData, goalsData, recentTransactions, dollarPriceMetrics] =
-    await Promise.all([
-      dashboardApi.cashflow(),
-      goalsApi.findAllWithTransactions(),
-      financeApi.lastRecords(),
-      dollarPriceApi.getAll(),
-    ]);
+  const {
+    cashflowData,
+    goalsData,
+    recentTransactions,
+    dollarPriceMetrics,
+    bankTotal,
+    portfolio,
+    dollarPrice,
+    financeRecordTotal,
+  } = await getCachedData();
 
   return (
     <div className="grid grid-cols-1 gap-y-4">
-      <Suspense
-        fallback={
-          <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 flex-1">
-            <TotalCardSkeleton />
-            <TotalCardSkeleton />
-            <TotalCardSkeleton />
-            <TotalCardSkeleton />
-          </section>
-        }
-      >
-        <DashboardMetrics />
-      </Suspense>
+      <DashboardMetrics
+        bankTotal={bankTotal}
+        portfolio={portfolio}
+        dollarPrice={dollarPrice}
+        financeRecordTotal={financeRecordTotal}
+      />
       <br />
       <section>
         <Suspense fallback={<TotalCardSkeleton />}>
